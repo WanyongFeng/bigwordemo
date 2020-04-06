@@ -1,46 +1,45 @@
 import React, { useEffect, useState } from "react";
 
-function Response({ correct, submitted, points, setPoints }) {
+function Response({
+  correct,
+  submitted,
+  points,
+  wrongFirst,
+  wrongMiddle,
+  wrongLast,
+  question,
+}) {
   let [text, setText] = useState(
-    "That's correct. You wrote funniest by dropping the y and adding -iest."
+    "That's correct. congratulations, you get the right answer !!!"
   );
-  useEffect(() => {
-    if (
-      text ===
-        "That word is not correct. Look at the sample words to decide how to add -est or -iest." &&
-      submitted
-    ) {
-      setPoints(points - 1);
-    }
-  }, [submitted]);
+  let [answer, setAnswer] = useState([]);
 
-  let message = (correct, submitted) => {
+
+  useEffect(() => {
+    setAnswer([...answer,String(question.answer)]);
+    console.log(answer);
+  }, [points]);
+
+  let message = () => {
     if (submitted) {
       if (correct) {
-        if (
-          text ===
-          "That word is not correct. Look at the sample words to decide how to add -est or -iest."
-        ) {
-          setText(
-            "That's correct. You wrote funniest by dropping the y and adding -iest."
-          );
-        }
         return text;
       } else {
-        if (
-          text ===
-            "That's correct. You wrote funniest by dropping the y and adding -iest." &&
-          points > 0
-        ) {
-          setText(
-            "That word is not correct. Look at the sample words to decide how to add -est or -iest."
-          );
+        if (points === 5) {
+          return wrongFirst;
+        } else if (points === 4 || points === 3) {
+          return wrongMiddle;
+        } else if (points === 2 || points === 1) {
+          return wrongLast;
+        } else {
+          return <p>you used all your chances, the correct answer is  <b>{answer[answer.length - 2]}</b></p>;
         }
-        return text;
       }
+    } else {
+      return "";
     }
   };
-  return <div className="Response">{points >=0 ? message(correct, submitted) : "you used all your chances, the answer is funniest"}</div>;
+  return <div className="Response">{message()}</div>;
 }
 
 export default Response;

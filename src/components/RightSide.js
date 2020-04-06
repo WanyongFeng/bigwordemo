@@ -1,11 +1,11 @@
 import React from 'react'
 import ScoreBoard from "./ScoreBoard"
 import WordBoard from "./WordBoard"
-function RightSide({correct, points}) {
+function RightSide({score, correctWords}) {
     return (
         <div className = "RightSide">
-            <ScoreBoard correct = {correct} points = {points}></ScoreBoard>
-            <WordBoard correct = {correct}></WordBoard>
+            <ScoreBoard score = {score}></ScoreBoard>
+            <WordBoard correctWords = {correctWords}></WordBoard>
         </div>
     )
 }

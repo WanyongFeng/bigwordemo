@@ -1,16 +1,12 @@
 import React from "react";
 
-function WordBoard({ correct }) {
-  let check = correct => {
-    if (correct) {
-      return <p>funniest</p>;
-    }
-  };
+function WordBoard({ correctWords }) {
+
 
   return (
     <div className="WordBoard">
       <p>Correct words:</p>
-      {check(correct)}
+      {correctWords.map((v) => <p>{v}</p>)}
     </div>
   );
 }

@@ -1,28 +1,38 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 
-let ex = "small → smallest \xa0\xa0 large → largest \xa0\xa0 fancy → fanciest";
-
-function GameBox({ setCorrect, setSubmitted }) {
-  let [value, setValue] = useState("");
+function GameBox({
+  submitted,
+  setSubmitted,
+  setCorrect,
+  question,
+  models,
+  points,
+  setPoints,
+  value,
+  setValue,
+}) {
+  let [problem, setProblem] = useState("");
   let [answer, setAnswer] = useState("");
-  let [question, setQuestion] = useState("");
 
   useEffect(() => {
-    async function fetchAnswer() {
-      let response = await axios.get("http://localhost:5000/getgameanswer");
-      setAnswer(response.data);
-    }
-    async function fetchQuestion() {
-      let response = await axios.get("http://localhost:5000/getgamequestion");
-      setQuestion(response.data);
-    }
-    fetchAnswer();
-    fetchQuestion();
-    setSubmitted(false);
-  }, [value, answer, question]);
+    setProblem(String(question.sentence));
+    setAnswer(String(question.answer));
+  },[question]);
 
-  let onChange = e => {
+  useEffect(() => {
+    if(value){
+      setSubmitted(false);
+      setCorrect(false);
+    }
+  },[value]);
+
+  useEffect(() => {
+    if(submitted){
+      setPoints(points - 1)
+    }
+  },[submitted])
+
+  let onChange = (e) => {
     setValue(e.target.value);
   };
 
@@ -31,13 +41,14 @@ function GameBox({ setCorrect, setSubmitted }) {
     setSubmitted(true);
   };
 
-  let showQuestion = question => {
-    let result = question.split(")");
+  let showQuestion = () => {
+    let temp = problem.replace(/[_]+/g,'');
+    let result = temp.split(")");
     let firstPart = result[0] + ") ";
     let secondPart = result[1] + " ";
     return (
       <div>
-        {firstPart} 
+        {firstPart}
         {<input type="text" value={value} onChange={onChange} />}
         {secondPart}
       </div>
@@ -45,11 +56,15 @@ function GameBox({ setCorrect, setSubmitted }) {
   };
   return (
     <div className="GameBox">
-      <b>{ex}</b>
+      {models.map((v) => (
+        <b>
+          {v.from} → {v.to} &nbsp; &nbsp; &nbsp;
+        </b>
+      ))}
       <br />
       <br />
       <br />
-      {showQuestion(question)}
+      {showQuestion()}
       <br />
       <br />
       <br />
