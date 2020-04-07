@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Models from "./Models";
 
 function GameBox({
   submitted,
@@ -6,6 +7,7 @@ function GameBox({
   setCorrect,
   question,
   models,
+  setModels,
   points,
   setPoints,
   value,
@@ -48,6 +50,8 @@ function GameBox({
     let secondPart = result[1] + " ";
     return (
       <div>
+        <Models models = {models} ></Models>
+        <br/> <br/>
         {firstPart}
         {<input type="text" value={value} onChange={onChange} />}
         {secondPart}
@@ -56,16 +60,10 @@ function GameBox({
   };
   return (
     <div className="GameBox">
-      {models.map((v) => (
-        <b>
-          {v.from} → {v.to} &nbsp; &nbsp; &nbsp;
-        </b>
-      ))}
       <br />
       <br />
       <br />
       {showQuestion()}
-      <br />
       <br />
       <br />
       <br />

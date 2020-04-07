@@ -25,7 +25,6 @@ function App() {
     async function fetchData() {
       let response = await axios.get("http://localhost:5000/getgame/0");
       response = JSON.parse(response.data);
-      setModels(response.models);
       setWrongFirst(response.wrongFirst[0]);
       setWrongMiddle(response.wrongMiddle[0]);
       setWrongLast(response.wrongLast[0]);
@@ -42,6 +41,7 @@ function App() {
       setQuestion(response.sentences[counter]);
       setPoints(response.maxAttempts);
       setValue("");
+      setModels(response.models);
     }
       fetchData();
       setOver(false);
@@ -52,6 +52,7 @@ function App() {
       <LeftSide
         instructions={instructions}
         examples={examples}
+        setModels = {setModels}
         models = {models}
         points = {points}
         setPoints = {setPoints}
