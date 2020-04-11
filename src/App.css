@@ -1,70 +1,75 @@
 .Main-content-format {
   display: flex;
   flex-direction: row;
-  background-color: rgba(21, 162, 218, 0.466);
+  background-color: rgb(51, 204, 255);
   padding-top: 10px;
+  width: 110%;
+  height:800px;
 }
 .Header {
-  width: 900px;
-  height: 60px;
-  border: 1px solid #b5bcc7;
+  width: 100%;
+  height: 50px;
   margin-top: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   margin-left: 5px;
-  padding-left: 5px;
-  padding-top: 15px;
-  background-color: white;
+  padding-left: 200px;
+  padding-top: 20px;
 }
 .Response {
-  width: 900px;
+  width: 120%;
   height: 60px;
-  border: 1px solid #b5bcc7;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  margin-left: 5px;
+  margin-top: 25px;
+  margin-bottom: -10px;
+  margin-left: 20px;
   padding-left: 5px;
   padding-top: 15px;
-  background-color: white;
 }
 .GameBox {
-  width: 900px;
-  height: 470px;
-  border: 1px solid #b5bcc7;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  width: 150%;
+  height: 400px;
+  margin-top: -10px;
+  margin-bottom: 5px;
   margin-left: 5px;
-  padding-left: 15px;
+  padding-left: 20px;
   padding-top: 15px;
-  background-color: white;
 }
 .Button {
-  border: 1px solid #769dc0;
-  padding: 2px 4px 4px 4px;
-  background-position: center top;
-  background-repeat: repeat-x;
-  background-color: #e4f2ff;
-  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.15);
-  margin-left: 8px;
-  margin-right: 8px;
-  margin-top: -25px;
+  border: 1.5px white solid;
+  border-radius: 1px;
+  padding-top:1.5px;
+  font-family: 'Patua One', cursive;  
+  font-size: 18px;
+  width: 100px;
+  background-color: rgba(255, 255, 255, 0);
+  color: white;
+  -moz-transition: 0.3s all;
+  -webkit-transition: 0.3s all;
+  -o-transition: 0.3s all;
+  transition: 0.3s all;
+  margin-left: 140px;
+  margin-right: 15px;
+  margin-top: 5px;
 }
-
+.Button:hover {
+  background-color: white;
+  color: rgb(51, 204, 255);
+}
 .ScoreBoard {
   width: 143px;
   height: 120px;
-  border: 1px solid #b5bcc7;
   margin-top: 10px;
   margin-bottom: 10px;
   margin-left: 5px;
   padding-left: 5px;
   padding-top: 15px;
-  background-color: black;
+  font-size: 25px;
+  border: 1px solid white
 }
 
 .WordBoard {
   width: 143px;
   height: 400px;
-  border: 1px solid #b5bcc7;
+  border: 1px solid white;
   margin-top: 10px;
   margin-bottom: 10px;
   margin-left: 5px;
@@ -73,17 +78,68 @@
 }
 
 .LeftSide {
-  width: 910px;
-  border: 1px solid #c0ccdf;
-  padding-left: 8px;
-  height: 674px;
-  margin-right: 10px;
+  width: 60%;
+  padding-left: 12px;
+  height: 50%;
+  margin-right: 10%;
 }
 
 .RightSide {
-  width: 170px;
-  border: 1px solid #c0ccdf;
-  padding-left: 8px;
-  height: 620px;
+  width: 15%;
+  height: 62%;
+  margin-left: 5%;
+  margin-top: 6%;
+}
+
+.HeadLine{
+  margin-left: 150px;
+  padding: 0.6rem 0;
+  width: 800px;
+  text-align: center;
+  font-family: 'Leckerli One', cursive;
+  font-size: 60px;
+  color: white;
+  margin-bottom: -20px;
+}
+
+input {
+  transition: 0.3s all;
+  font-family: 'Patua One', cursive;
+  border-radius: 0.3rem;
+  padding: 1.2rem;
+  font-size: 2.2rem;
+  width: 220px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+input::placeholder {
+  color: rgb(200, 200, 200);
+}
+
+input:focus {
+  outline: none;
+  background-color: rgba(255, 255, 255, 1.0);
+}
+
+button {
+  border: 1.5px white solid;
+  border-radius: 1px;
+  padding-top:1.5px;
+  font-family: 'Patua One', cursive;  
+  font-size: 18px;
+  width: 100px;
+  background-color: rgba(255, 255, 255, 0);
+  color: white;
+  -moz-transition: 0.3s all;
+  -webkit-transition: 0.3s all;
+  -o-transition: 0.3s all;
+  transition: 0.3s all;
+  margin-left: 140px;
+  margin-right: 15px;
+  margin-top: 5px;
+}
+button:hover {
   background-color: white;
+  color: rgb(51, 204, 255);
 }

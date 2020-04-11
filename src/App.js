@@ -50,6 +50,7 @@ function App() {
   return (
     <div className="Main-content-format">
       <LeftSide
+        className = "LeftSide"
         instructions={instructions}
         examples={examples}
         setModels = {setModels}
@@ -72,7 +73,7 @@ function App() {
         correctWords = {correctWords}
         setCorrectWords = {setCorrectWords}
       ></LeftSide>
-      <RightSide score = {score} correctWords = {correctWords}></RightSide>
+      <RightSide score = {score} correctWords = {correctWords} className = "RightSide"></RightSide>
     </div>
   );
 }

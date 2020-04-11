@@ -19,20 +19,20 @@ function GameBox({
   useEffect(() => {
     setProblem(String(question.sentence));
     setAnswer(String(question.answer));
-  },[question]);
+  }, [question]);
 
   useEffect(() => {
-    if(value){
+    if (value && value != String(question.hint)) {
       setSubmitted(false);
       setCorrect(false);
     }
-  },[value]);
+  }, [value]);
 
   useEffect(() => {
-    if(submitted){
-      setPoints(points - 1)
+    if (submitted) {
+      setPoints(points - 1);
     }
-  },[submitted])
+  }, [submitted]);
 
   let onChange = (e) => {
     setValue(e.target.value);
@@ -44,17 +44,19 @@ function GameBox({
   };
 
   let showQuestion = () => {
-    let temp = problem.replace(/[_]+/g,'');
+    let temp = problem.replace(/[_]+/g, "");
     let result = temp.split(")");
     let firstPart = result[0] + ") ";
     let secondPart = result[1] + " ";
     return (
       <div>
-        <Models models = {models} ></Models>
-        <br/> <br/>
-        {firstPart}
-        {<input type="text" value={value} onChange={onChange} />}
-        {secondPart}
+        <Models models={models}></Models>
+        <br />
+        <b style = {{color:"white", fontSize:"25px"}}>
+          {firstPart}
+          {<input type="text" value={value} onChange={onChange} />}
+          {secondPart}
+        </b>
       </div>
     );
   };
