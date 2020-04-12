@@ -36,7 +36,7 @@ function LeftSide({
       }
       setCounter(counter + 1);
       setOver(true);
-    }
+    } //when the game is over
     if (!correct && points < 6 && points > 0) {
       if (points === 4) {
         let modelIndex = parseInt(question.model) - 1;
@@ -65,7 +65,7 @@ function LeftSide({
         setValue(String(question.hint));
       }
     }
-  }, [points]);
+  }, [points]);  //reaction based on change of points
   return (
     <div className="LeftSide">
       <Header examples={examples} instructions={instructions}></Header>

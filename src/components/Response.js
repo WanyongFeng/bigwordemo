@@ -29,14 +29,11 @@ function Response({
         } else if (points === 4 || points === 3) {
           return wrongMiddle;
         } else if (points === 2 || points === 1) {
-          console.log("fuck");
           return wrongLast;
         } else {
           return <p>you used all your chances, the correct answer is  <b>{answer[answer.length - 2]}</b></p>;
         }
       }
-    } else {
-      return "";
     }
   };
   return <div className="Response"><b style = {{color:"white", fontSize:"25px"}}>{message()}</b></div>;

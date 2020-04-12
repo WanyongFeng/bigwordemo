@@ -16,10 +16,10 @@ function App() {
   let [over, setOver] = useState(false); //check if the game is over ot not
   let [counter, setCounter] = useState(0); //index of loading game
   let [points, setPoints] = useState(0); // points for each question
-  let [submitted, setSubmitted] = useState(false);
-  let [value, setValue] = useState("");
-  let [score, setScore] = useState(0);
-  let [correctWords, setCorrectWords] = useState([]);
+  let [submitted, setSubmitted] = useState(false); // check whether submitted or not
+  let [value, setValue] = useState(""); //what user types
+  let [score, setScore] = useState(0); // totoal score
+  let [correctWords, setCorrectWords] = useState([]); // correct words
 
   useEffect(() => {
     async function fetchData() {
