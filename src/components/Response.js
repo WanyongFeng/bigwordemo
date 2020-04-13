@@ -10,7 +10,7 @@ function Response({
   question,
 }) {
   let [text, setText] = useState(
-    "That's correct. congratulations, you get the right answer !!!"
+    "That's correct. You got the right answer!"
   );
   let [answer, setAnswer] = useState([]);
 
