@@ -5,7 +5,7 @@ import LinkInstruction from "./LinkInstruction";
 function Header({ examples, instructions }) {
   return (
     <div>
-      <h1 className = "HeadLine"> Big Word — Spell Binder</h1>
+      <h1 className = "HeadLine"> Big Words — Spell Binder</h1>
       <div className="Header">
         <LinkInstruction
           name={"Instructions"}

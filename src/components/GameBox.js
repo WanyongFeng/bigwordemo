@@ -70,7 +70,7 @@ function GameBox({
       <br />
       <br />
       <button disabled={!value} onClick={check}>
-        submit
+        Submit
       </button>
     </div>
   );
