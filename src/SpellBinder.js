@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import LeftSide from "./components/LeftSide";
-import RightSide from "./components/RightSide";
+import LeftSide from "./components/SpellBinder/LeftSide.js";
+import RightSide from "./components/SpellBinder/RightSide.js";
 import axios from "axios";
+import AppHeader from "./components/AppHeader.js";
+import InfoBar from "./components/InfoBar.js";
 
 export function Spellbinder(props) {
 
@@ -48,7 +50,11 @@ export function Spellbinder(props) {
 
     return (
         <div className="Main-content-format">
-            <LeftSide className="LeftSide" instructions={instructions} examples={examples} setModels={setModels} models={models} points={points} setPoints={setPoints} wrongFirst={wrongFirst} wrongMiddle={wrongMiddle} wrongLast={wrongLast} setOver={setOver} question={question} counter={counter} setCounter={setCounter} submitted={submitted} setSubmitted={setSubmitted} value={value} setValue={setValue} score={score} setScore={setScore} correctWords={correctWords} setCorrectWords={setCorrectWords}></LeftSide>
+            <div className="LeftSide">
+                <AppHeader renderGame={props.renderGame} />
+                <InfoBar examples={examples} instructions={instructions} />
+                <LeftSide className="LeftSide" setModels={setModels} models={models} points={points} setPoints={setPoints} wrongFirst={wrongFirst} wrongMiddle={wrongMiddle} wrongLast={wrongLast} setOver={setOver} question={question} counter={counter} setCounter={setCounter} submitted={submitted} setSubmitted={setSubmitted} value={value} setValue={setValue} score={score} setScore={setScore} correctWords={correctWords} setCorrectWords={setCorrectWords}></LeftSide>
+            </div>
             <RightSide score={score} correctWords={correctWords} className="RightSide"></RightSide>
         </div>
     );

@@ -5,9 +5,12 @@ import { Spellbinder } from "./SpellBinder.js";
 import { ChooseGame } from "./ChooseGame.js"
 
 class App extends Component{
-  state = {
-      renderGame: ""
-  };
+  constructor(props){
+    super(props);
+    this.state = {
+      renderGame: "Choose a Game"
+    }
+  }
 
   buttonClick = e => {
       this.setState({renderGame: e.target.value});
@@ -15,10 +18,10 @@ class App extends Component{
 
   render(){
     switch(this.state.renderGame){
-      case "spellbinder":
-        return <Spellbinder />;
+      case "Spell Binder":
+        return <Spellbinder renderGame={this.state.renderGame}/>;
       default:
-        return <ChooseGame buttonClick = {this.buttonClick}/>;
+        return <ChooseGame renderGame={this.state.renderGame} buttonClick = {this.buttonClick}/>;
     }
   }
 }

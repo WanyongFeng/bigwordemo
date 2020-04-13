@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Models from "./Models";
+import Models from "./SpellBinder/Models";
 
 function GameBox({
   submitted,
@@ -7,7 +7,6 @@ function GameBox({
   setCorrect,
   question,
   models,
-  setModels,
   points,
   setPoints,
   value,

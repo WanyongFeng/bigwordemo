@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
-import Header from "./Header";
-import Response from "./Response";
-import GameBox from "./GameBox";
+import Response from "./Response.js";
+import GameBox from "../GameBox.js";
 
 function LeftSide({
   points,
   setPoints,
-  examples,
-  instructions,
   models,
   setModels,
   wrongFirst,
@@ -67,8 +64,7 @@ function LeftSide({
     }
   }, [points]);  //reaction based on change of points
   return (
-    <div className="LeftSide">
-      <Header examples={examples} instructions={instructions}></Header>
+    <span>
       <Response
         submitted={submitted}
         correct={correct}
@@ -90,7 +86,7 @@ function LeftSide({
         value={value}
         setValue={setValue}
       ></GameBox>
-    </div>
+    </span>
   );
 }
 

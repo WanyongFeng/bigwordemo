@@ -145,6 +145,7 @@ button:hover {
 }
 
 .GameFrame {
+  padding-top: 10px;
   background-color: rgb(51, 204, 255);
   height: 800px;
 }

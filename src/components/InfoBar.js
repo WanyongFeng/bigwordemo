@@ -2,10 +2,9 @@ import React from "react";
 import "../App.css";
 import LinkInstruction from "./LinkInstruction";
 
-function Header({ examples, instructions }) {
+function InfoBar({ examples, instructions }) {
   return (
     <div>
-      <h1 className = "HeadLine"> Big Words — Spell Binder</h1>
       <div className="Header">
         <LinkInstruction
           name={"Instructions"}
@@ -20,4 +19,4 @@ function Header({ examples, instructions }) {
   );
 }
 
-export default Header;
+export default InfoBar;
