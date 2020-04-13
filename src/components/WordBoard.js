@@ -1,8 +1,6 @@
 import React from "react";
 
 function WordBoard({ correctWords }) {
-
-
   return (
     <div className="WordBoard">
       <b style = {{color: "white", fontSize: "16px"}}>Correct words:</b>
