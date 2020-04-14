@@ -6,7 +6,6 @@ import AppHeader from "./components/AppHeader.js";
 import InfoBar from "./components/InfoBar.js";
 
 export function Spellbinder(props) {
-
     let [models, setModels] = useState([]); //models that shown as examples
     let [wrongMiddle, setWrongMiddle] = useState(""); // error message second, third  time
     let [question, setQuestion] = useState({}); // question
