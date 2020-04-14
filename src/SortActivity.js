@@ -1,32 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import AppHeader from "./components/AppHeader.js";
 
 export function SortActivity(props) {
-    state = () => {
-        items: getItems(10),
-        selected: getItems(5, 10)
-    };
-
     let [items, setItems] = useState([]);
     let [selected, setSelected] = useState([]);
+    let [examples, setExamples] = useState(null);
+    let [instructions, setInstructions] = useState(null);
 
-    id2List = {
-        droppable: 'items',
-        droppable2: 'selected'
+    useEffect(() => {
+        // fetch some data from the database
+        if (items.length === 0) {
+            setItems(getItems(10));
+        }
+    }, [items]);
+
+    useEffect(() => {
+        // fetch some data from the database
+        if (selected.length === 0) {
+            setSelected(getItems(5,10));
+        }
+    }, [selected]);
+
+    const getList = (id) => {
+        if (id==='droppable') {
+            return items;
+        } else if (id==='droppable2') {
+            return selected;
+        }
     };
 
-    getList = id => this.state[this.id2List[id]];
-
     // fake data generator
-    getItems = (count, offset = 0) =>
+    const getItems = (count, offset = 0) =>
         Array.from({ length: count }, (v, k) => k).map(k => ({
             id: `item-${k + offset}`,
             content: `item ${k + offset}`
         }));
 
     // a little function to help us with reordering the result
-    reorder = (list, startIndex, endIndex) => {
+    const reorder = (list, startIndex, endIndex) => {
         const result = Array.from(list);
         const [removed] = result.splice(startIndex, 1);
         result.splice(endIndex, 0, removed);
@@ -37,7 +49,7 @@ export function SortActivity(props) {
     /**
      * Moves an item from one list to another list.
      */
-    move = (source, destination, droppableSource, droppableDestination) => {
+    const move = (source, destination, droppableSource, droppableDestination) => {
         const sourceClone = Array.from(source);
         const destClone = Array.from(destination);
         const [removed] = sourceClone.splice(droppableSource.index, 1);
@@ -51,12 +63,12 @@ export function SortActivity(props) {
         return result;
     };
 
-    grid = 8;
+    const grid = 8;
 
-    getItemStyle = (isDragging, draggableStyle) => ({
+    const getItemStyle = (isDragging, draggableStyle) => ({
         // some basic styles to make the items look a bit nicer
         userSelect: 'none',
-        padding: grid * 2,
+        padding: grid,
         margin: `0 0 ${grid}px 0`,
 
         // change background colour if dragging
@@ -66,8 +78,8 @@ export function SortActivity(props) {
         ...draggableStyle
     });
 
-    getListStyle = isDraggingOver => ({
-        background: isDraggingOver ? 'lightblue' : 'lightgrey',
+    const getListStyle = isDraggingOver => ({
+        background: isDraggingOver ? 'blue' : 'lightblue',
         padding: grid,
         width: 250
     });
@@ -77,8 +89,7 @@ export function SortActivity(props) {
      * the IDs of the droppable container to the names of the
      * source arrays stored in the state.
      */
-
-    onDragEnd = result => {
+    const onDragEnd = result => {
         const { source, destination } = result;
 
         // dropped outside the list
@@ -88,30 +99,26 @@ export function SortActivity(props) {
 
         if (source.droppableId === destination.droppableId) {
             const items = reorder(
-                this.getList(source.droppableId),
+                getList(source.droppableId),
                 source.index,
                 destination.index
             );
 
-            let state = { items };
-
-            if (source.droppableId === 'droppable2') {
-                state = { selected: items };
+            if(source.droppableId === 'droppable') {
+                setItems(items);
+            }else if(source.droppableId === 'droppable2') {
+                setSelected(items);
             }
-
-            this.setState(state);
         } else {
             const result = move(
-                this.getList(source.droppableId),
-                this.getList(destination.droppableId),
+                getList(source.droppableId),
+                getList(destination.droppableId),
                 source,
                 destination
             );
 
-            this.setState({
-                items: result.droppable,
-                selected: result.droppable2
-            });
+            setItems(result.droppable);
+            setSelected(result.droppable2);
         }
     };
 
@@ -121,13 +128,13 @@ export function SortActivity(props) {
         <div className="Main-content-format">
             <AppHeader renderGame={props.renderGame} />
             {/* <InfoBar examples={examples} instructions={instructions} /> */}
-            <DragDropContext onDragEnd={this.onDragEnd}>
+            <DragDropContext onDragEnd={onDragEnd}>
                 <Droppable droppableId="droppable">
                     {(provided, snapshot) => (
                         <div
                             ref={provided.innerRef}
                             style={getListStyle(snapshot.isDraggingOver)}>
-                            {this.state.items.map((item, index) => (
+                            {items.map((item, index) => (
                                 <Draggable
                                     key={item.id}
                                     draggableId={item.id}
@@ -155,7 +162,7 @@ export function SortActivity(props) {
                         <div
                             ref={provided.innerRef}
                             style={getListStyle(snapshot.isDraggingOver)}>
-                            {this.state.selected.map((item, index) => (
+                            {selected.map((item, index) => (
                                 <Draggable
                                     key={item.id}
                                     draggableId={item.id}
