@@ -1,6 +1,6 @@
 import React from 'react';
-import ScoreBoard from "../ScoreBoard";
-import WordBoard from "../WordBoard";
+import ScoreBoard from "./ScoreBoard.js";
+import WordBoard from "./WordBoard.js";
 
 function RightSide({score, correctWords}) {
     return (
