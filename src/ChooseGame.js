@@ -11,6 +11,8 @@ export function ChooseGame(props){
             <br />
             <button className="Button" value="Spell Binder" variant="primary" onClick={props.buttonClick}>Spell Binder</button>
             <br />
+            <button className="Button" value="Sort" variant="primary" onClick={props.buttonClick}>Sort</button>
+            <br />
         </div>
     );
 }

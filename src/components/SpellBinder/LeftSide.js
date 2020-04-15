@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Response from "./Response.js";
-import GameBox from "../GameBox.js";
+import GameBox from "./GameBox.js";
 
 function LeftSide({
   points,

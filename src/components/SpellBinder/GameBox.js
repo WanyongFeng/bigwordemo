@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Models from "./SpellBinder/Models";
+import Models from "./Models.js";
 
 function GameBox({
   submitted,
