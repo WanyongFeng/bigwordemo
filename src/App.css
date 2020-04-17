@@ -4,7 +4,7 @@
   background-color: rgb(51, 204, 255);
   padding-top: 10px;
   width: 110%;
-  height:800px;
+  height: 800px;
 }
 .Header {
   width: 100%;
@@ -36,8 +36,8 @@
 .Button {
   border: 1.5px white solid;
   border-radius: 1px;
-  padding-top:1.5px;
-  font-family: 'Patua One', cursive;  
+  padding-top: 1.5px;
+  font-family: "Patua One", cursive;
   font-size: 18px;
   width: auto;
   background-color: rgba(255, 255, 255, 0);
@@ -63,7 +63,7 @@
   padding-left: 5px;
   padding-top: 15px;
   font-size: 25px;
-  border: 1px solid white
+  border: 1px solid white;
 }
 
 .WordBoard {
@@ -91,12 +91,12 @@
   margin-top: 6%;
 }
 
-.HeadLine{
+.HeadLine {
   margin-left: 150px;
   padding: 0.6rem 0;
   width: 800px;
   text-align: center;
-  font-family: 'Leckerli One', cursive;
+  font-family: "Leckerli One", cursive;
   font-size: 60px;
   color: white;
   margin-bottom: -20px;
@@ -104,7 +104,7 @@
 
 input {
   transition: 0.3s all;
-  font-family: 'Patua One', cursive;
+  font-family: "Patua One", cursive;
   border-radius: 0.3rem;
   padding: 1.2rem;
   font-size: 2.2rem;
@@ -119,14 +119,14 @@ input::placeholder {
 
 input:focus {
   outline: none;
-  background-color: rgba(255, 255, 255, 1.0);
+  background-color: rgba(255, 255, 255, 1);
 }
 
 button {
   border: 1.5px white solid;
   border-radius: 1px;
-  padding-top:1.5px;
-  font-family: 'Patua One', cursive;  
+  padding-top: 1.5px;
+  font-family: "Patua One", cursive;
   font-size: 18px;
   width: 100px;
   background-color: rgba(255, 255, 255, 0);
@@ -148,4 +148,45 @@ button:hover {
   padding-top: 10px;
   background-color: rgb(51, 204, 255);
   height: 800px;
+}
+
+.WordBinderBox {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.cell1 {
+  border: 1.5px black solid;
+  width: 120px;
+  height: 30px;
+  text-align: center;
+  background-color: #61dafb;
+  margin-bottom: 1px;
+  color: black;
+}
+
+.cell2 {
+  border: 1.5px black solid;
+  width: 120px;
+  height: 30px;
+  text-align: center;
+  background-color: yellow;
+  margin-bottom: 1px;
+  color: black;
+}
+
+.cell3 {
+  border: 1.5px black solid;
+  width: 120px;
+  height: 30px;
+  text-align: center;
+  background-color: purple;
+  margin-bottom: 1px;
+  color: black;
 }
