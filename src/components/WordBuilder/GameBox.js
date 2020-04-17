@@ -75,7 +75,7 @@ function GameBox({
       <button
         disabled={!value}
         onClick={check}
-        style={{ marginBottom: "-100px", marginLeft: "850px" }}
+        style={{ marginBottom: "-100px"}}
       >
         Submit
       </button>

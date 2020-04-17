@@ -35,36 +35,6 @@ function LeftSide({
       setCounter(counter + 1);
       setOver(true);
     } //when the game is over
-    if (!correct && points < 6 && points > 0) {
-      let prefix = [
-        "un",
-        "re",
-        "dis",
-        "semi",
-        "de",
-        "in",
-        "im",
-        "non",
-        "sub",
-        "fore",
-        "super",
-        "pre",
-        "mis",
-        "inter",
-        "anti",
-        "trans",
-        "mid",
-        "bio",
-        "geo",
-        "con",
-        "electr",
-      ];
-      let suffix = ["ed", "ly", "s", "ion", "ation", "ity", "able"];
-      let checkPrefix = false;
-      let checkRoot = false;
-      let checkSuffix = false;
-
-    }
     setValue("")
   }, [points]); //reaction based on change of points
   return (
@@ -74,6 +44,7 @@ function LeftSide({
         correct={correct}
         question={question}
         points={points}
+        value = {value}
       ></Response>
       <GameBox
         submitted={submitted}
