@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
-import LeftSide from "./components/SpellBinder/LeftSide.js";
+import LeftSide from "./components/WordBuilder/LeftSide.js";
 import RightSide from "./components/RightSide.js";
 import axios from "axios";
 import AppHeader from "./components/AppHeader.js";
 import InfoBar from "./components/InfoBar.js";
 
-export function Spellbinder(props) {
-  let [models, setModels] = useState([]); //models that shown as examples
-  let [wrongMiddle, setWrongMiddle] = useState(""); // error message second, third  time
+export function WordBuilder(props) {
+  let [prefix, setPrefix] = useState([]);
+  let [root, setRoot] = useState([]);
+  let [suffix, setSuffix] = useState([]);
   let [question, setQuestion] = useState({}); // question
-  let [wrongLast, setWrongLast] = useState(""); // error message forth, fifth, time
-  let [examples, setExamples] = useState(null); //done
-  let [instructions, setInstructions] = useState(null); //done
-  let [wrongFirst, setWrongFirst] = useState(""); //error message first time
+  let [examples, setExamples] = useState(null);
+  let [instructions, setInstructions] = useState(null);
   let [over, setOver] = useState(false); //check if the game is over ot not
   let [counter, setCounter] = useState(0); //index of loading game
   let [points, setPoints] = useState(0); // points for each question
@@ -23,25 +22,32 @@ export function Spellbinder(props) {
 
   useEffect(() => {
     async function fetchData() {
-      let response = await axios.get("http://localhost:5000/getSpellBinder/0");
+      let response = await axios.get("http://localhost:5000/getWordBuilder/0");
       response = JSON.parse(response.data);
-      setWrongFirst(response.wrongFirst[0]);
-      setWrongMiddle(response.wrongMiddle[0]);
-      setWrongLast(response.wrongLast[0]);
       setInstructions(response.instructions);
       setExamples(response.example);
+      let parts = response.parts;
+
+      for (let i = 0; i < parts.length; i++){
+        if(parts[i].heading === "Prefix"){
+            setPrefix([...parts[i].words])
+        }if (parts[i].heading === "Roots"){
+            setRoot([...parts[i].words])
+        }if(parts[i].heading === "Suffix"){
+            setSuffix([...parts[i].words])
+        }
+      }
     }
     fetchData();
-  }, [wrongMiddle]); //handles static value of a problem set
+  }, []); //handles static value of a problem set
 
   useEffect(() => {
     async function fetchData() {
-      let response = await axios.get("http://localhost:5000/getSpellBinder/0");
+      let response = await axios.get("http://localhost:5000/getWordBuilder/0");
       response = JSON.parse(response.data);
       setQuestion(response.sentences[counter]);
-      setPoints(response.maxAttempts);
+      setPoints(6);
       setValue("");
-      setModels(response.models);
     }
     fetchData();
     setOver(false);
@@ -54,13 +60,8 @@ export function Spellbinder(props) {
         <InfoBar examples={examples} instructions={instructions} />
         <LeftSide
           className="LeftSide"
-          setModels={setModels}
-          models={models}
           points={points}
           setPoints={setPoints}
-          wrongFirst={wrongFirst}
-          wrongMiddle={wrongMiddle}
-          wrongLast={wrongLast}
           setOver={setOver}
           question={question}
           counter={counter}
@@ -73,6 +74,9 @@ export function Spellbinder(props) {
           setScore={setScore}
           correctWords={correctWords}
           setCorrectWords={setCorrectWords}
+          suffix = {suffix}
+          root = {root}
+          prefix = {prefix}
         ></LeftSide>
       </div>
       <RightSide
