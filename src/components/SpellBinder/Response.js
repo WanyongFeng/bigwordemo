@@ -14,7 +14,6 @@ function Response({
   );
   let [answer, setAnswer] = useState([]);
 
-
   useEffect(() => {
     setAnswer([...answer,String(question.answer)]);
   }, [points]);
@@ -24,14 +23,17 @@ function Response({
       if (correct) {
         return text;
       } else {
-        if (points === 5) {
-          return wrongFirst;
-        } else if (points === 4 || points === 3) {
-          return wrongMiddle;
-        } else if (points === 2 || points === 1) {
-          return wrongLast;
-        } else {
-          return <p>you used all your chances, the correct answer is  <b>{answer[answer.length - 2]}</b></p>;
+        switch(points){
+          case 5:
+            return wrongFirst;
+          case 4:
+          case 3:
+            return wrongMiddle;
+          case 2:
+          case 1:
+            return wrongLast;
+          default:
+              return <p>you used all your chances, the correct answer is  <b>{answer[answer.length - 2]}</b></p>;
         }
       }
     }

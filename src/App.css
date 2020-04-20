@@ -6,6 +6,7 @@
   width: 110%;
   height: 800px;
 }
+
 .Header {
   width: 100%;
   height: 50px;
@@ -15,6 +16,7 @@
   padding-left: 200px;
   padding-top: 20px;
 }
+
 .Response {
   width: 120%;
   height: 60px;
@@ -24,6 +26,7 @@
   padding-left: 5px;
   padding-top: 15px;
 }
+
 .GameBox {
   width: 150%;
   height: 400px;
@@ -33,6 +36,7 @@
   padding-left: 20px;
   padding-top: 15px;
 }
+
 .Button {
   border: 1.5px white solid;
   border-radius: 1px;
@@ -50,10 +54,12 @@
   margin-right: 15px;
   margin-top: 5px;
 }
+
 .Button:hover {
   background-color: white;
   color: rgb(51, 204, 255);
 }
+
 .ScoreBoard {
   width: 143px;
   height: 120px;
@@ -139,6 +145,7 @@ button {
   margin-right: 15px;
   margin-top: 5px;
 }
+
 button:hover {
   background-color: white;
   color: rgb(51, 204, 255);
@@ -189,4 +196,14 @@ button:hover {
   background-color: purple;
   margin-bottom: 1px;
   color: black;
+}
+
+.Main-content-format-sort {
+  background-color: rgb(51, 204, 255);
+  padding-top: 10px;
+  width: 110%;
+}
+
+.DroppableColumn {
+  padding-left: 30px
 }

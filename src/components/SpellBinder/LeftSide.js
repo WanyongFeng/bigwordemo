@@ -26,7 +26,7 @@ function LeftSide({
   let [correct, setCorrect] = useState(false);
 
   useEffect(() => {
-    if ((correct && points < 6 && points > 0) || points == 0) {
+    if ((correct && points < 6 && points > 0) || points === 0) {
       if (correct && points < 6 && points > 0) {
         setScore(score + points);
         setCorrectWords([...correctWords, String(question.answer)]);
