@@ -1,32 +1,23 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Spellbinder } from "./SpellBinder.js";
 import { ChooseGame } from "./ChooseGame.js";
 import { SortActivity } from "./SortActivity.js";
 
-class App extends Component{
-  constructor(props){
-    super(props);
-    this.state = {
-      renderGame: "Choose a Game"
-    }
-  }
+export function App(props){
+    let [renderGame, setRenderGame] = useState("Choose a Game");
 
-  buttonClick = e => {
-      this.setState({renderGame: e.target.value});
-  };
+    const buttonClick = (e) => {
+        setRenderGame(e.target.value);
+    };
 
-  render(){
-    switch(this.state.renderGame){
+    switch(renderGame){
       case "Spell Binder":
-        return <Spellbinder renderGame={this.state.renderGame}/>;
+        return (<Spellbinder renderGame={renderGame} />);
       case "Sort":
-        return <SortActivity renderGame={this.state.renderGame}/>;
+        return (<SortActivity renderGame={renderGame} />);
       default:
-        return <ChooseGame renderGame={this.state.renderGame} buttonClick = {this.buttonClick}/>;
+        return (<ChooseGame renderGame={renderGame} buttonClick = {buttonClick} />);
     }
-  }
 }
-
-export default App;

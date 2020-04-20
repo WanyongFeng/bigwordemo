@@ -21,7 +21,7 @@ function GameBox({
   }, [question]);
 
   useEffect(() => {
-    if (value && value != String(question.hint)) {
+    if (value && value !== String(question.hint)) {
       setSubmitted(false);
       setCorrect(false);
     }

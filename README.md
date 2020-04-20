@@ -1,5 +1,9 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## BigWords TODO
+
+Make sure to add instructions for adding data to the data folder in this project.
+
 ## Available Scripts
 
 In the project directory, you can run:

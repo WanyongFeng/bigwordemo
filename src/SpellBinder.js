@@ -23,7 +23,7 @@ export function Spellbinder(props) {
 
     useEffect(() => {
         async function fetchData() {
-            let response = await axios.get("http://localhost:5000/getgame/0");
+            let response = await axios.get("http://localhost:5000/getSpellBinderGame/0");
             response = JSON.parse(response.data);
             setWrongFirst(response.wrongFirst[0]);
             setWrongMiddle(response.wrongMiddle[0]);
@@ -36,7 +36,7 @@ export function Spellbinder(props) {
 
     useEffect(() => {
         async function fetchData() {
-            let response = await axios.get("http://localhost:5000/getgame/0");
+            let response = await axios.get("http://localhost:5000/getSpellBinderGame/0");
             response = JSON.parse(response.data);
             setQuestion(response.sentences[counter]);
             setPoints(response.maxAttempts);

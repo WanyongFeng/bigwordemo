@@ -1,46 +1,108 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import AppHeader from "./components/AppHeader.js";
-import RightSide from "./components/RightSide.js"
-import { findByLabelText } from '@testing-library/dom';
+import InfoBar from "./components/InfoBar.js";
+import RightSide from "./components/RightSide.js";
+import axios from "axios";
 
 export function SortActivity(props) {
-    let [items, setItems] = useState([]);
-    let [selected, setSelected] = useState([]);
+    let [sourceBin, setSourceBin] = useState({
+        heading: null,
+        description: null,
+        words: []
+    });
+
+    let [firstBin, setFirstBin] = useState({
+        heading: null,
+        description: null,
+        words: []
+    });
+
+    let [secondBin, setSecondBin] = useState({
+        heading: null,
+        description: null,
+        words: []
+    });
+
+    let [thirdBin, setThirdBin] = useState({
+        heading: null,
+        description: null,
+        words: []
+    });
+
+    const getBinWords = (droppableId) => {
+        switch(droppableId){
+            case "droppable":
+                return sourceBin.words;
+            case "droppable2":
+                return firstBin.words;
+            case "droppable3":
+                return secondBin.words;
+            case "droppable4":
+                return thirdBin.words;
+        }
+    }
 
     let [examples, setExamples] = useState(null);
     let [instructions, setInstructions] = useState(null);
+    let [noneCorrect, setNoneCorrect] = useState("");
+    let [partiallyCorrect, setPartiallyCorrect] = useState("");
+    let [allCorrect, setAllCorrect] = useState("");
+    let [maxTriesMessage, setMaxTriesMessage] = useState("");
+
     let [score, setScore] = useState(0); // totoal score
     let [correctWords, setCorrectWords] = useState([]); // correct words
 
-    useEffect(() => {
-        // fetch some data from the database
-        if (items.length === 0) {
-            setItems(getItems(10));
-        }
-    }, [items]);
+    const processWordsForSourceBin = (response) => {
+        let words = [];
+        let counter = 0;
+        response.bins.forEach(bin => {
+            words=words.concat(Array.from(bin.words, word => ({
+                id: `item-${counter++}`,
+                content: word
+            })));
+        });
 
-    useEffect(() => {
-        // fetch some data from the database
-        if (selected.length === 0) {
-            setSelected(getItems(5,10));
-        }
-    }, [selected]);
-
-    const getList = (id) => {
-        if (id==='droppable') {
-            return items;
-        } else if (id==='droppable2') {
-            return selected;
-        }
+        return {
+            heading: response.srcbin.heading,
+            description: response.srcbin.description,
+            words: words
+        };
     };
 
-    // fake data generator
-    const getItems = (count, offset = 0) =>
-        Array.from({ length: count }, (v, k) => k).map(k => ({
-            id: `item-${k + offset}`,
-            content: `item ${k + offset}`
-        }));
+    useEffect(() => {
+        async function fetchData() {
+            let response = await axios.get("http://localhost:5000/getSortGame/28");
+            response = JSON.parse(response.data);
+            setNoneCorrect(response.noneCorrect);
+            setPartiallyCorrect(response.partiallyCorrect);
+            setAllCorrect(response.allCorrect);
+            setMaxTriesMessage(response.maxTriesMessage);
+            setInstructions(response.instructions);
+            setExamples(response.example);
+            
+            setSourceBin(processWordsForSourceBin(response));
+            setFirstBin({
+                heading: response.bins[0].heading,
+                description: response.bins[0].description,
+                words: []
+            });
+            setSecondBin({
+                heading: response.bins[1].heading,
+                description: response.bins[1].description,
+                words: []
+            });
+
+            if(response.bins.length>2){ // at most 3 bins?
+                setThirdBin({
+                    heading: response.bins[2].heading,
+                    description: response.bins[2].description,
+                    words: []
+                });
+            }
+        }
+        fetchData();
+    }, []); // empty array means we only send this request once
 
     // a little function to help us with reordering the result
     const reorder = (list, startIndex, endIndex) => {
@@ -86,7 +148,7 @@ export function SortActivity(props) {
     const getListStyle = isDraggingOver => ({
         background: isDraggingOver ? 'blue' : 'lightblue',
         padding: grid,
-        width: 250
+        width: 135
     });
 
     /**
@@ -103,97 +165,253 @@ export function SortActivity(props) {
         }
 
         if (source.droppableId === destination.droppableId) {
-            const items = reorder(
-                getList(source.droppableId),
+            const words = reorder(
+                getBinWords(source.droppableId),
                 source.index,
                 destination.index
             );
 
             if(source.droppableId === 'droppable') {
-                setItems(items);
+                setSourceBin({
+                    heading: sourceBin.heading,
+                    description: sourceBin.description,
+                    words: words
+                });
             }else if(source.droppableId === 'droppable2') {
-                setSelected(items);
+                setFirstBin({
+                    heading: firstBin.heading,
+                    description: firstBin.description,
+                    words: words
+                });
+            }else if(source.droppableId === 'droppable3') {
+                setSecondBin({
+                    heading: secondBin.heading,
+                    description: secondBin.description,
+                    words: words
+                });
+            }else if(source.droppableId === 'droppable4') {
+                setThirdBin({
+                    heading: thirdBin.heading,
+                    description: thirdBin.description,
+                    words: words
+                });
             }
         } else {
             const result = move(
-                getList(source.droppableId),
-                getList(destination.droppableId),
+                getBinWords(source.droppableId),
+                getBinWords(destination.droppableId),
                 source,
                 destination
             );
 
-            setItems(result.droppable);
-            setSelected(result.droppable2);
+            switch(source.droppableId){
+                case "droppable":
+                    setSourceBin({
+                        heading: sourceBin.heading,
+                        description: sourceBin.description,
+                        words: result.droppable
+                    });
+                    break;
+                case "droppable2":
+                    setFirstBin({
+                        heading: firstBin.heading,
+                        description: firstBin.description,
+                        words: result.droppable2
+                    });
+                    break;
+                case "droppable3":
+                    setSecondBin({
+                        heading: secondBin.heading,
+                        description: secondBin.description,
+                        words: result.droppable3
+                    });
+                    break;
+                case "droppable4":
+                    setThirdBin({
+                        heading: thirdBin.heading,
+                        description: thirdBin.description,
+                        words: result.droppable4
+                    });
+                    break;
+            }
+
+            switch(destination.droppableId){
+                case "droppable":
+                    setSourceBin({
+                        heading: sourceBin.heading,
+                        description: sourceBin.description,
+                        words: result.droppable
+                    });
+                    break;
+                case "droppable2":
+                    setFirstBin({
+                        heading: firstBin.heading,
+                        description: firstBin.description,
+                        words: result.droppable2
+                    });
+                    break;
+                case "droppable3":
+                    setSecondBin({
+                        heading: secondBin.heading,
+                        description: secondBin.description,
+                        words: result.droppable3
+                    });
+                    break;
+                case "droppable4":
+                    setThirdBin({
+                        heading: thirdBin.heading,
+                        description: thirdBin.description,
+                        words: result.droppable4
+                    });
+                    break;
+            }      
         }
     };
 
     // Normally you would want to split things out into separate components.
     // But in this example everything is just done in one place for simplicity
     return (
-        <div className="Main-content-format">
-            <div style={{display: "flex", justifyContent: "space-around"}}>
-                <AppHeader renderGame={props.renderGame} />
-                {/* <InfoBar examples={examples} instructions={instructions} /> */}
+        <div className="Main-content-format-sort">
+            <AppHeader renderGame={props.renderGame} />
+            <br />
+            <InfoBar examples={examples} instructions={instructions} />
+            <br />
+            <div style={{display: "flex"}}>
                 <DragDropContext onDragEnd={onDragEnd} style={{height: "80%"}}>
-                    <Droppable droppableId="droppable">
-                        {(provided, snapshot) => (
-                            <div
-                                ref={provided.innerRef}
-                                style={getListStyle(snapshot.isDraggingOver)}>
-                                {items.map((item, index) => (
-                                    <Draggable
-                                        key={item.id}
-                                        draggableId={item.id}
-                                        index={index}>
-                                        {(provided, snapshot) => (
-                                            <div
-                                                ref={provided.innerRef}
-                                                {...provided.draggableProps}
-                                                {...provided.dragHandleProps}
-                                                style={getItemStyle(
-                                                    snapshot.isDragging,
-                                                    provided.draggableProps.style
-                                                )}>
-                                                {item.content}
-                                            </div>
-                                        )}
-                                    </Draggable>
-                                ))}
-                                {provided.placeholder}
-                            </div>
-                        )}
-                    </Droppable>
-                    <Droppable droppableId="droppable2">
-                        {(provided, snapshot) => (
-                            <div
-                                ref={provided.innerRef}
-                                style={getListStyle(snapshot.isDraggingOver)}>
-                                {selected.map((item, index) => (
-                                    <Draggable
-                                        key={item.id}
-                                        draggableId={item.id}
-                                        index={index}>
-                                        {(provided, snapshot) => (
-                                            <div
-                                                ref={provided.innerRef}
-                                                {...provided.draggableProps}
-                                                {...provided.dragHandleProps}
-                                                style={getItemStyle(
-                                                    snapshot.isDragging,
-                                                    provided.draggableProps.style
-                                                )}>
-                                                {item.content}
-                                            </div>
-                                        )}
-                                    </Draggable>
-                                ))}
-                                {provided.placeholder}
-                            </div>
-                        )}
-                    </Droppable>
+                    <div className="DroppableColumn">
+                        <b>{sourceBin.heading}</b>
+                        <p>{sourceBin.description}</p>
+                        <Droppable droppableId="droppable">
+                            {(provided, snapshot) => (
+                                <div
+                                    ref={provided.innerRef}
+                                    style={getListStyle(snapshot.isDraggingOver)}>
+                                    {sourceBin.words.map((item, index) => (
+                                        <Draggable
+                                            key={item.id}
+                                            draggableId={item.id}
+                                            index={index}>
+                                            {(provided, snapshot) => (
+                                                <div
+                                                    ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                    style={getItemStyle(
+                                                        snapshot.isDragging,
+                                                        provided.draggableProps.style
+                                                    )}>
+                                                    {item.content}
+                                                </div>
+                                            )}
+                                        </Draggable>
+                                    ))}
+                                    {provided.placeholder}
+                                </div>
+                            )}
+                        </Droppable>
+                    </div>
+                    <div className="DroppableColumn">
+                        <b>{firstBin.heading}</b>
+                        <p>{firstBin.description}</p>
+                        <Droppable droppableId="droppable2">
+                            {(provided, snapshot) => (
+                                <div
+                                    ref={provided.innerRef}
+                                    style={getListStyle(snapshot.isDraggingOver)}>
+                                    {firstBin.words.map((item, index) => (
+                                        <Draggable
+                                            key={item.id}
+                                            draggableId={item.id}
+                                            index={index}>
+                                            {(provided, snapshot) => (
+                                                <div
+                                                    ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                    style={getItemStyle(
+                                                        snapshot.isDragging,
+                                                        provided.draggableProps.style
+                                                    )}>
+                                                    {item.content}
+                                                </div>
+                                            )}
+                                        </Draggable>
+                                    ))}
+                                    {provided.placeholder}
+                                </div>
+                            )}
+                        </Droppable>
+                    </div>
+                    <div className="DroppableColumn">
+                        <b><p>{secondBin.heading}</p></b>
+                        <p>{secondBin.description}</p>
+                        <Droppable droppableId="droppable3">
+                            {(provided, snapshot) => (
+                                <div
+                                    ref={provided.innerRef}
+                                    style={getListStyle(snapshot.isDraggingOver)}>
+                                    {secondBin.words.map((item, index) => (
+                                        <Draggable
+                                            key={item.id}
+                                            draggableId={item.id}
+                                            index={index}>
+                                            {(provided, snapshot) => (
+                                                <div
+                                                    ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                    style={getItemStyle(
+                                                        snapshot.isDragging,
+                                                        provided.draggableProps.style
+                                                    )}>
+                                                    {item.content}
+                                                </div>
+                                            )}
+                                        </Draggable>
+                                    ))}
+                                    {provided.placeholder}
+                                </div>
+                            )}
+                        </Droppable>
+                    </div>
+                    {thirdBin.heading!==null &&
+                        <div className="DroppableColumn">
+                            <b>{thirdBin.heading}</b>
+                            <p>{thirdBin.description}</p>
+                            <Droppable droppableId="droppable4">
+                                {(provided, snapshot) => (
+                                    <div
+                                        ref={provided.innerRef}
+                                        style={getListStyle(snapshot.isDraggingOver)}>
+                                        {thirdBin.words.map((item, index) => (
+                                            <Draggable
+                                                key={item.id}
+                                                draggableId={item.id}
+                                                index={index}>
+                                                {(provided, snapshot) => (
+                                                    <div
+                                                        ref={provided.innerRef}
+                                                        {...provided.draggableProps}
+                                                        {...provided.dragHandleProps}
+                                                        style={getItemStyle(
+                                                            snapshot.isDragging,
+                                                            provided.draggableProps.style
+                                                        )}>
+                                                        {item.content}
+                                                    </div>
+                                                )}
+                                            </Draggable>
+                                        ))}
+                                        {provided.placeholder}
+                                    </div>
+                                )}
+                            </Droppable>
+                        </div>
+                    }
                 </DragDropContext>
-            </div>
             <RightSide score={score} correctWords={correctWords} className="RightSide" />
+            </div>
+            
         </div>
     );
 }
