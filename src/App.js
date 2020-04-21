@@ -1,26 +1,21 @@
-import React, { useState } from 'react'
+import React from 'react'
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Spellbinder } from "./SpellBinder.js";
 import { ChooseGame } from "./ChooseGame.js";
 import { SortActivity } from "./SortActivity.js";
 import { WordBuilder } from "./WordBuilder.js";
+import {BrowserRouter, Route} from "react-router-dom"
+
 
 export function App(props){
-    let [renderGame, setRenderGame] = useState("Choose a Game");
+    return (
+      <BrowserRouter>
+        <Route path = "/" exact component= {() => <ChooseGame renderGame= {"Home Page"}/>}></Route>
+        <Route path = "/SpellBinder" exact component= {() => < Spellbinder renderGame= {"SpellBinder"}/>}></Route>
+        <Route path = "/WordBuilder" exact component= {() => < WordBuilder renderGame={"WordBuilder"}/>}></Route>
+        <Route path = "/SortActivity" exact component= {() => < SortActivity renderGame={"SortActivity"}/>}></Route>
+      </BrowserRouter>
 
-    const buttonClick = (e) => {
-        setRenderGame(e.target.value);
-    };
-
-    switch(renderGame){
-      case "Spell Binder":
-        return (<Spellbinder renderGame={renderGame} />);
-      case "Sort":
-        return <SortActivity renderGame={renderGame} />;
-      case "Word Builder":
-        return <WordBuilder renderGame={renderGame} />;
-      default:
-        return (<ChooseGame renderGame={renderGame} buttonClick = {buttonClick} />);
-    }
+    )
 }

@@ -273,6 +273,7 @@ export function SortActivity(props) {
     return (
         <div className="Main-content-format-sort">
             <AppHeader renderGame={props.renderGame} />
+            <a href="/" style={{ color: "white", marginLeft:"10px"}}>home page</a>
             <br />
             <InfoBar examples={examples} instructions={instructions} />
             <br />

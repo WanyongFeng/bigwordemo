@@ -1,20 +1,26 @@
-import React from 'react'
+import React from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AppHeader from "./components/AppHeader.js";
 
-export function ChooseGame(props){
-    return(
-        <div className="GameFrame">
-            <AppHeader renderGame={props.renderGame}/>
-            <br />
-            <br />
-            <button className="Button" value="Spell Binder" variant="primary" onClick={props.buttonClick}>Spell Binder</button>
-            <br />
-            <button className="Button" value="Word Builder" variant="primary" onClick={props.buttonClick}>Word Builder</button>
-            <br />
-            <button className="Button" value="Sort" variant="primary" onClick={props.buttonClick}>Sort</button>
-            <br />
-        </div>
-    );
+export function ChooseGame(props) {
+  return (
+    <div className="GameFrame">
+      <AppHeader renderGame={props.renderGame} />
+      <br />
+      <br />
+      <a style={{ color: "white"}} href="/SpellBinder">
+        Spell Binder
+      </a>
+      <br />
+      <a style={{ color: "white" }} href="/WordBuilder">
+        WordBuilder
+      </a>
+      <br />
+      <a style={{ color: "white" }} href="/SortActivity">
+        SortActivity
+      </a>
+      <br />
+    </div>
+  );
 }
