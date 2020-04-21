@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import AppHeader from "./components/AppHeader.js";
-import InfoBar from "./components/InfoBar.js";
+import SortInfoBar from "./components/SortActivity/SortInfoBar.js";
+import SortResponse from "./components/SortActivity/SortResponse.js";
 import RightSide from "./components/RightSide.js";
 import axios from "axios";
 
@@ -15,20 +16,34 @@ export function SortActivity(props) {
     let [firstBin, setFirstBin] = useState({
         heading: null,
         description: null,
-        words: []
+        words: [],
+        correctWords: []
     });
 
     let [secondBin, setSecondBin] = useState({
         heading: null,
         description: null,
-        words: []
+        words: [],
+        correctWords: []
     });
 
     let [thirdBin, setThirdBin] = useState({
         heading: null,
         description: null,
-        words: []
+        words: [],
+        correctWords: []
     });
+
+    let [examples, setExamples] = useState(null);
+    let [instructions, setInstructions] = useState(null);
+    let [noneCorrect, setNoneCorrect] = useState("");
+    let [partiallyCorrect, setPartiallyCorrect] = useState("");
+    let [allCorrect, setAllCorrect] = useState("");
+    let [maxTriesMessage, setMaxTriesMessage] = useState("");
+    let [maxTries, setMaxTries] = useState(0);
+
+    let [score, setScore] = useState(0); // totoal score
+    let [correctWords, setCorrectWords] = useState([]); // correct words
 
     const getBinWords = (droppableId) => {
         switch(droppableId){
@@ -43,16 +58,6 @@ export function SortActivity(props) {
         }
     }
 
-    let [examples, setExamples] = useState(null);
-    let [instructions, setInstructions] = useState(null);
-    let [noneCorrect, setNoneCorrect] = useState("");
-    let [partiallyCorrect, setPartiallyCorrect] = useState("");
-    let [allCorrect, setAllCorrect] = useState("");
-    let [maxTriesMessage, setMaxTriesMessage] = useState("");
-
-    let [score, setScore] = useState(0); // totoal score
-    let [correctWords, setCorrectWords] = useState([]); // correct words
-
     const processWordsForSourceBin = (response) => {
         let words = [];
         let counter = 0;
@@ -66,8 +71,32 @@ export function SortActivity(props) {
         return {
             heading: response.srcbin.heading,
             description: response.srcbin.description,
-            words: words
+            words: shuffle(words)
         };
+    };
+
+    const processRandomRegex = (heading) => {
+        let val = heading;
+        val = val.replace('/_', '<i>');
+        val = val.replace('_/', '</i>');
+        return val;
+    };
+
+    /**
+     * Shuffles array in place.
+     * @param {Array} a items An array containing the items.
+     * https://stackoverflow.com/questions/6274339/how-can-i-shuffle-an-array
+     * https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm
+     */
+    const shuffle = (a) => {
+        var j, x, i;
+        for (i = a.length - 1; i > 0; i--) {
+            j = Math.floor(Math.random() * (i + 1));
+            x = a[i];
+            a[i] = a[j];
+            a[j] = x;
+        }
+        return a;
     };
 
     useEffect(() => {
@@ -78,31 +107,41 @@ export function SortActivity(props) {
             setPartiallyCorrect(response.partiallyCorrect);
             setAllCorrect(response.allCorrect);
             setMaxTriesMessage(response.maxTriesMessage);
+            setMaxTries(response.maxTries);
             setInstructions(response.instructions);
             setExamples(response.example);
             
             setSourceBin(processWordsForSourceBin(response));
             setFirstBin({
-                heading: response.bins[0].heading,
+                heading: processRandomRegex(response.bins[0].heading),
                 description: response.bins[0].description,
-                words: []
+                words: [],
+                correctWords: response.bins[0].words
             });
             setSecondBin({
-                heading: response.bins[1].heading,
+                heading: processRandomRegex(response.bins[1].heading),
                 description: response.bins[1].description,
-                words: []
+                words: [],
+                correctWords: response.bins[1].words
             });
 
             if(response.bins.length>2){ // at most 3 bins?
                 setThirdBin({
-                    heading: response.bins[2].heading,
+                    heading: processRandomRegex(response.bins[2].heading),
                     description: response.bins[2].description,
-                    words: []
+                    words: [],
+                    correctWords: response.bins[2].words
                 });
             }
         }
         fetchData();
     }, []); // empty array means we only send this request once
+
+    useEffect(() => {
+        if(sourceBin.words.length == 0 && (firstBin.words.length > 0 || secondBin.words.length > 0)){
+
+        }
+    }, [sourceBin]); // check for 
 
     // a little function to help us with reordering the result
     const reorder = (list, startIndex, endIndex) => {
@@ -130,7 +169,7 @@ export function SortActivity(props) {
         return result;
     };
 
-    const grid = 8;
+    const grid = 6;
 
     const getItemStyle = (isDragging, draggableStyle) => ({
         // some basic styles to make the items look a bit nicer
@@ -274,9 +313,21 @@ export function SortActivity(props) {
         <div className="Main-content-format-sort">
             <AppHeader renderGame={props.renderGame} />
             <br />
-            <InfoBar examples={examples} instructions={instructions} />
+            <SortInfoBar
+                examples={examples}
+                instructions={instructions}
+                sourceBin={sourceBin}
+                firstBin={firstBin}
+                secondBin={secondBin}
+                thirdBin={thirdBin}
+                noneCorrect={noneCorrect}
+                partiallyCorrect={partiallyCorrect}
+                allCorrect={allCorrect}
+                maxTries={maxTries}
+                maxTriesMessage={maxTriesMessage}
+            ></SortInfoBar>
             <br />
-            <div style={{display: "flex"}}>
+            <div style={{display: "flex", paddingLeft: 30, paddingBottom: 100}}>
                 <DragDropContext onDragEnd={onDragEnd} style={{height: "80%"}}>
                     <div className="DroppableColumn">
                         <b>{sourceBin.heading}</b>
@@ -311,7 +362,7 @@ export function SortActivity(props) {
                         </Droppable>
                     </div>
                     <div className="DroppableColumn">
-                        <b>{firstBin.heading}</b>
+                    <b dangerouslySetInnerHTML={{__html: firstBin.heading}} />
                         <p>{firstBin.description}</p>
                         <Droppable droppableId="droppable2">
                             {(provided, snapshot) => (
@@ -343,7 +394,7 @@ export function SortActivity(props) {
                         </Droppable>
                     </div>
                     <div className="DroppableColumn">
-                        <b><p>{secondBin.heading}</p></b>
+                    <b dangerouslySetInnerHTML={{__html: secondBin.heading}} />
                         <p>{secondBin.description}</p>
                         <Droppable droppableId="droppable3">
                             {(provided, snapshot) => (
@@ -376,7 +427,7 @@ export function SortActivity(props) {
                     </div>
                     {thirdBin.heading!==null &&
                         <div className="DroppableColumn">
-                            <b>{thirdBin.heading}</b>
+                            <b dangerouslySetInnerHTML={{__html: thirdBin.heading}} />
                             <p>{thirdBin.description}</p>
                             <Droppable droppableId="droppable4">
                                 {(provided, snapshot) => (
@@ -411,7 +462,6 @@ export function SortActivity(props) {
                 </DragDropContext>
             <RightSide score={score} correctWords={correctWords} className="RightSide" />
             </div>
-            
         </div>
     );
 }

@@ -205,5 +205,8 @@ button:hover {
 }
 
 .DroppableColumn {
-  padding-left: 30px
+  padding-left: 30px;
+  border-style: solid;
+  background-color: yellow;
+  padding-right: 30px;
 }
