@@ -14,11 +14,11 @@ export function ChooseGame(props) {
       </a>
       <br />
       <a style={{ color: "white" }} href="/WordBuilder">
-        WordBuilder
+        Word Builder
       </a>
       <br />
       <a style={{ color: "white" }} href="/SortActivity">
-        SortActivity
+        Sort
       </a>
       <br />
     </div>

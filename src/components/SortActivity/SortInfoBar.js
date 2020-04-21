@@ -3,6 +3,7 @@ import "../../App.css";
 import LinkInstruction from "../LinkInstruction";
 
 function InfoBar({ examples, instructions }) {
+  const check= "";
   return (
     <div>
       <div className="Header">
