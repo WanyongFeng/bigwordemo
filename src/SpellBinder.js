@@ -51,7 +51,7 @@ export function Spellbinder(props) {
     <div className="Main-content-format">
       <div className="LeftSide">
         <AppHeader renderGame={props.renderGame} />
-        <a href="/" style={{ color: "white", marginLeft:"10px"}}>home page</a>
+        <a href="/" style={{ color: "white", marginLeft:"10px"}}>Home Page</a>
         <InfoBar examples={examples} instructions={instructions} />
         <LeftSide
           className="LeftSide"

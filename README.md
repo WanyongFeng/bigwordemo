@@ -2,7 +2,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## BigWords TODO
 
-Make sure to add instructions for adding data to the data folder in this project.
+~~Make sure to add instructions for adding data to the data folder in this project.~~
+Make sure to add some capability of tracking which dependencies are needed for this project so that it can be ran by new users.
 
 ## Available Scripts
 
