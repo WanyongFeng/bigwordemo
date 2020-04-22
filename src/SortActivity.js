@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import AppHeader from "./components/AppHeader.js";
 import SortInfoBar from "./components/SortActivity/SortInfoBar.js";
-import SortResponse from "./components/SortActivity/SortResponse.js";
 import RightSide from "./components/RightSide.js";
 import axios from "axios";
 
@@ -41,9 +40,11 @@ export function SortActivity(props) {
 	let [allCorrect, setAllCorrect] = useState("");
 	let [maxTriesMessage, setMaxTriesMessage] = useState("");
 	let [maxTries, setMaxTries] = useState(0);
+	let [gameNumber, setGameNumber] = useState(28);
 
 	let [score, setScore] = useState(0); // totoal score
 	let [correctWords, setCorrectWords] = useState([]); // correct words
+	let [originalScore, setOriginalScore] = useState(0); // incoming score from other games potentially
 
 	const getBinWords = (droppableId) => {
 		switch (droppableId) {
@@ -101,7 +102,7 @@ export function SortActivity(props) {
 
 	useEffect(() => {
 		async function fetchData() {
-			let response = await axios.get("http://localhost:5000/getSortGame/28");
+			let response = await axios.get(`http://localhost:5000/getSortGame/${gameNumber}`);
 			response = JSON.parse(response.data);
 			setNoneCorrect(response.noneCorrect);
 			setPartiallyCorrect(response.partiallyCorrect);
@@ -132,16 +133,17 @@ export function SortActivity(props) {
 					words: [],
 					correctWords: response.bins[2].words
 				});
+			}else{
+				setThirdBin({
+					heading: null,
+					description: null,
+					words: [],
+					correctWords: []
+				});
 			}
 		}
 		fetchData();
-	}, []); // empty array means we only send this request once
-
-	useEffect(() => {
-		if (sourceBin.words.length == 0 && (firstBin.words.length > 0 || secondBin.words.length > 0)) {
-
-		}
-	}, [sourceBin]); // check for 
+	}, [gameNumber]); // empty array means we only send this request once, with gameNumber we run again with new game
 
 	// a little function to help us with reordering the result
 	const reorder = (list, startIndex, endIndex) => {
@@ -169,7 +171,7 @@ export function SortActivity(props) {
 		return result;
 	};
 
-	const grid = 6;
+	const grid = 3;
 
 	const getItemStyle = (isDragging, draggableStyle) => ({
 		// some basic styles to make the items look a bit nicer
@@ -187,7 +189,7 @@ export function SortActivity(props) {
 	const getListStyle = isDraggingOver => ({
 		background: isDraggingOver ? 'blue' : 'lightblue',
 		padding: grid,
-		width: 135
+		width: "100%"
 	});
 
     /**
@@ -220,19 +222,22 @@ export function SortActivity(props) {
 				setFirstBin({
 					heading: firstBin.heading,
 					description: firstBin.description,
-					words: words
+					words: words,
+					correctWords: firstBin.correctWords
 				});
 			} else if (source.droppableId === 'droppable3') {
 				setSecondBin({
 					heading: secondBin.heading,
 					description: secondBin.description,
-					words: words
+					words: words,
+					correctWords: secondBin.correctWords
 				});
 			} else if (source.droppableId === 'droppable4') {
 				setThirdBin({
 					heading: thirdBin.heading,
 					description: thirdBin.description,
-					words: words
+					words: words,
+					correctWords: thirdBin.correctWords
 				});
 			}
 		} else {
@@ -255,21 +260,24 @@ export function SortActivity(props) {
 					setFirstBin({
 						heading: firstBin.heading,
 						description: firstBin.description,
-						words: result.droppable2
+						words: result.droppable2,
+						correctWords: firstBin.correctWords
 					});
 					break;
 				case "droppable3":
 					setSecondBin({
 						heading: secondBin.heading,
 						description: secondBin.description,
-						words: result.droppable3
+						words: result.droppable3,
+						correctWords: secondBin.correctWords
 					});
 					break;
 				case "droppable4":
 					setThirdBin({
 						heading: thirdBin.heading,
 						description: thirdBin.description,
-						words: result.droppable4
+						words: result.droppable4,
+						correctWords: thirdBin.correctWords
 					});
 					break;
 			}
@@ -286,25 +294,35 @@ export function SortActivity(props) {
 					setFirstBin({
 						heading: firstBin.heading,
 						description: firstBin.description,
-						words: result.droppable2
+						words: result.droppable2,
+						correctWords: firstBin.correctWords
 					});
 					break;
 				case "droppable3":
 					setSecondBin({
 						heading: secondBin.heading,
 						description: secondBin.description,
-						words: result.droppable3
+						words: result.droppable3,
+						correctWords: secondBin.correctWords
 					});
 					break;
 				case "droppable4":
 					setThirdBin({
 						heading: thirdBin.heading,
 						description: thirdBin.description,
-						words: result.droppable4
+						words: result.droppable4,
+						correctWords: thirdBin.correctWords
 					});
 					break;
 			}
 		}
+	};
+	
+	const changeGame = () => {
+		let tentativeGameNumber = ++gameNumber; // we need to increment first so that number will change on setstate hook and re-render
+		if(tentativeGameNumber === 33 || tentativeGameNumber === 38) tentativeGameNumber++;
+		if(tentativeGameNumber === 40) tentativeGameNumber = 0;
+		setGameNumber(tentativeGameNumber);
 	};
 
 	// Normally you would want to split things out into separate components.
@@ -313,6 +331,8 @@ export function SortActivity(props) {
 		<div className="Main-content-format-sort">
 			<AppHeader renderGame={props.renderGame} />
 			<a href="/" style={{ color: "white", marginLeft: "10px" }}>Home Page</a>
+			<br />
+			<button className="Button" onClick={changeGame}>Next Game</button>
 			<br />
 			<SortInfoBar
 				examples={examples}
@@ -326,6 +346,13 @@ export function SortActivity(props) {
 				allCorrect={allCorrect}
 				maxTries={maxTries}
 				maxTriesMessage={maxTriesMessage}
+				setSourceBin={setSourceBin}
+				setFirstBin={setFirstBin}
+				setSecondBin={setSecondBin}
+				setThirdBin={setThirdBin}
+				score={score}
+				setScore={setScore}
+				originalScore={originalScore}
 			></SortInfoBar>
 			<br />
 			<div style={{ display: "flex", paddingLeft: 30, paddingBottom: 100 }}>

@@ -226,4 +226,10 @@ button:hover {
   border-style: solid;
   background-color: yellow;
   padding-right: 30px;
+  width: 225px;
+}
+
+.SortResponseText {
+  color: "white";
+  font-size: "25px";
 }
