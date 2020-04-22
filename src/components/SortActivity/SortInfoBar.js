@@ -25,6 +25,10 @@ function SortInfoBar({
 	let [text, setText] = useState("");
 	let [tries, setTries] = useState(0);
 
+	useEffect(() => {
+		setText("");
+	}, [firstBin.correctWords]);
+	
 	const removeWord = (wordObjectArray, word) => {
 		let newArray = [];
 		wordObjectArray.forEach(wordObject => {
